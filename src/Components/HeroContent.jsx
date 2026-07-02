@@ -9,7 +9,20 @@ function HeroContent({
   onSearchChange,
   onSearchSubmit,
 }) {
-  const time = current?.time?.slice(11, 16);
+
+
+
+
+
+  const time = current?.time
+  ? new Date(current.time).toLocaleTimeString("en-US", {
+      hour: "numeric",
+      minute: "2-digit",
+      hour12: true,
+    })
+  : "";
+
+
 
   return (
     <div className="absolute top-0 left-0 w-full md:w-auto md:h-full z-20 flex flex-col items-center md:items-start justify-start p-4 pt-6 md:pt-12 md:pl-6 lg:pl-10 text-white font-sans gap-6 md:gap-8">
