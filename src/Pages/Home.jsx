@@ -1,38 +1,54 @@
-
-import {useEffect, useState} from "react";
-import {getWeather} from "../api/weatherApi"
-import Heroback from '../Components/Heroback'; 
-import HeroContent from "../Components/HeroContent";
-import WeatherForecast from "../Components/WeatherForecast";
-
+import { useEffect, useState } from "react";
+import { getWeather, searchCity } from "../api/weatherApi";
+import Heroback from "../Components/Heroback";
 
 function Home() {
-   const [weather, setweather] = 
-   useState(null);
-   
-   useEffect(() => {
-     const loadWheather = async () =>
-       {
-       const data = await getWeather();
-       setweather(data);
+  const [searchVal, setSearchVal] = useState("");
+  const [weather, setWeather] = useState(null);
+  const [cityName, setCityName] = useState("Cairo");
 
-       console.log(data);
-     };
+  const handleSearchChange = (e) => {
+    setSearchVal(e.target.value);
+  };
 
-     loadWheather();
-   }, []);
+  const handleSearchSubmit = async (e) => {
+    e.preventDefault();
 
- return (
-  <>
-    <Heroback />
-    <HeroContent 
-    current={weather?.current} />
+    const result = await searchCity(searchVal);
 
+    if (!result.results || result.results.length === 0) {
+      alert("City not found");
+      return;
+    }
 
+    const city = result.results[0];
 
-    
-  </>
-);
+    setCityName(city.name);
+
+    const data = await getWeather(city.latitude, city.longitude);
+
+    setWeather(data);
+  };
+
+  useEffect(() => {
+    const loadWeather = async () => {
+      const data = await getWeather(30.0444, 31.2357);
+      setWeather(data);
+    };
+
+    loadWeather();
+  }, []);
+
+  return (
+    <Heroback
+      current={weather?.current}
+      daily={weather?.daily}
+      cityName={cityName}
+      searchVal={searchVal}
+      onSearchChange={handleSearchChange}
+      onSearchSubmit={handleSearchSubmit}
+    />
+  );
 }
 
 export default Home;
