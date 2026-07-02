@@ -1,5 +1,5 @@
 import React from 'react';
-import bgImage from '../assets/background.jpg';
+import bgVideo from '../assets/back.mp4';
 import WeatherForecast from './WeatherForecast';
 import HeroContent from './HeroContent';
 
@@ -14,9 +14,12 @@ function Heroback({
   return (
     <div className="relative w-full h-screen overflow-hidden">
       <div className="absolute inset-0 w-full h-full z-[-1]">
-        <img
-          src={bgImage}
-          alt="Weather Background"
+        <video
+          src={bgVideo}
+          autoPlay
+          loop
+          muted
+          playsInline
           className="w-full h-full object-cover object-center"
         />
         <div className="absolute inset-0 bg-black/40" />
